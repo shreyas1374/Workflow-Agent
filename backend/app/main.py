@@ -51,6 +51,15 @@ app.include_router(actions_router)
 class ResumeRequest(BaseModel):
     approver_id: str
 
+@app.get("/")
+def root():
+    return {
+        "status": "ok",
+        "service": "AI Agent Workflow Executor Backend",
+        "health": "/health",
+        "docs": "/docs"
+    }
+
 @app.get("/health")
 def health_check():
     return {"status": "ok", "service": "workflow-executor"}
