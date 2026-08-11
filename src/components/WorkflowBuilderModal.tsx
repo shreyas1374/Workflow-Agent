@@ -55,7 +55,7 @@ export function WorkflowBuilderModal({ workflowId, userRole, onClose }: Workflow
   useEffect(() => {
     if (data?.workflows_by_pk) {
       const wf = data.workflows_by_pk;
-      setWorkflowName(wf.name || '');
+      setWorkflowName(wf.name || 'Untitled Workflow');
       setWorkflowDesc(wf.description || '');
 
       if (wf.workflow_steps) {
@@ -164,11 +164,12 @@ export function WorkflowBuilderModal({ workflowId, userRole, onClose }: Workflow
   const handleSaveAll = async () => {
     if (isReadOnly) return;
     try {
+      const finalName = workflowName.trim() || 'Untitled Workflow';
       // 1. Update workflow details
       await updateDetailsMutation({
         variables: {
           id: workflowId,
-          name: workflowName,
+          name: finalName,
           description: workflowDesc,
         },
       });

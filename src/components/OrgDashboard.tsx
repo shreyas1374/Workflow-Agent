@@ -88,13 +88,14 @@ export function OrgDashboard({ onOrgLoaded }: OrgDashboardProps) {
 
   const handleCreateWorkflow = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newWorkflowName.trim() || !orgId) return;
+    const finalName = newWorkflowName.trim() || 'Untitled Workflow';
+    if (!orgId) return;
     try {
       const res = await createWorkflowMutation({
         variables: {
           org_id: orgId,
-          name: newWorkflowName,
-          description: newWorkflowDesc,
+          name: finalName,
+          description: newWorkflowDesc.trim(),
         },
       });
       setShowCreateModal(false);
@@ -231,7 +232,7 @@ export function OrgDashboard({ onOrgLoaded }: OrgDashboardProps) {
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
-                      <h4 className="font-bold text-slate-100 text-sm">{wf.name}</h4>
+                      <h4 className="font-bold text-slate-100 text-sm">{wf.name || 'Untitled Workflow'}</h4>
                       <span className="text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">
                         {stepCount} Steps
                       </span>
