@@ -232,7 +232,9 @@ export function OrgDashboard({ onOrgLoaded }: OrgDashboardProps) {
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
-                      <h4 className="font-bold text-slate-100 text-sm">{wf.name || 'Untitled Workflow'}</h4>
+                      <h4 className="font-bold text-slate-100 text-sm">
+                        {wf.name && wf.name.trim() ? wf.name.trim() : 'Untitled Workflow'}
+                      </h4>
                       <span className="text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">
                         {stepCount} Steps
                       </span>
