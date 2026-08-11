@@ -1,0 +1,395 @@
+{
+  "resource_permissions": {
+    "organizations": {
+      "select": {
+        "filter": {
+          "org_members": {
+            "user_id": { "_eq": "X-Hasura-User-Id" }
+          }
+        }
+      },
+      "update": {
+        "filter": {
+          "org_members": {
+            "_and": [
+              { "user_id": { "_eq": "X-Hasura-User-Id" } },
+              { "role": { "_eq": "owner" } }
+            ]
+          }
+        }
+      }
+    },
+    "org_members": {
+      "select": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "user_id": { "_eq": "X-Hasura-User-Id" }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_eq": "owner" } }
+              ]
+            }
+          }
+        }
+      },
+      "update": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_eq": "owner" } }
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_eq": "owner" } }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "workflows": {
+      "select": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "user_id": { "_eq": "X-Hasura-User-Id" }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_in": ["owner", "editor"] } }
+              ]
+            }
+          }
+        }
+      },
+      "update": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_in": ["owner", "editor"] } }
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_in": ["owner", "editor"] } }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "workflow_steps": {
+      "select": {
+        "filter": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "user_id": { "_eq": "X-Hasura-User-Id" }
+              }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "_or": [
+            {
+              "workflow": {
+                "organization": {
+                  "org_members": {
+                    "_and": [
+                      { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                      { "role": { "_eq": "owner" } }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "_and": [
+                {
+                  "workflow": {
+                    "organization": {
+                      "org_members": {
+                        "_and": [
+                          { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                          { "role": { "_eq": "editor" } }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "step_type": { "_nin": ["db_write", "notify"] }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "update": {
+        "filter": {
+          "_or": [
+            {
+              "workflow": {
+                "organization": {
+                  "org_members": {
+                    "_and": [
+                      { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                      { "role": { "_eq": "owner" } }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "_and": [
+                {
+                  "workflow": {
+                    "organization": {
+                      "org_members": {
+                        "_and": [
+                          { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                          { "role": { "_eq": "editor" } }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "step_type": { "_nin": ["db_write", "notify"] }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "delete": {
+        "filter": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "workflow_triggers": {
+      "select": {
+        "filter": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "user_id": { "_eq": "X-Hasura-User-Id" }
+              }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "_or": [
+            {
+              "workflow": {
+                "organization": {
+                  "org_members": {
+                    "_and": [
+                      { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                      { "role": { "_eq": "owner" } }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "_and": [
+                {
+                  "workflow": {
+                    "organization": {
+                      "org_members": {
+                        "_and": [
+                          { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                          { "role": { "_eq": "editor" } }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "trigger_type": { "_eq": "manual" }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "update": {
+        "filter": {
+          "_or": [
+            {
+              "workflow": {
+                "organization": {
+                  "org_members": {
+                    "_and": [
+                      { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                      { "role": { "_eq": "owner" } }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "_and": [
+                {
+                  "workflow": {
+                    "organization": {
+                      "org_members": {
+                        "_and": [
+                          { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                          { "role": { "_eq": "editor" } }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "trigger_type": { "_eq": "manual" }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "delete": {
+        "filter": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "workflow_runs": {
+      "select": {
+        "filter": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "user_id": { "_eq": "X-Hasura-User-Id" }
+              }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "workflow": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "step_runs": {
+      "select": {
+        "filter": {
+          "workflow_run": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "user_id": { "_eq": "X-Hasura-User-Id" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "notifications": {
+      "select": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "user_id": { "_eq": "X-Hasura-User-Id" }
+            }
+          }
+        }
+      }
+    },
+    "custom_db_records": {
+      "select": {
+        "filter": {
+          "organization": {
+            "org_members": {
+              "user_id": { "_eq": "X-Hasura-User-Id" }
+            }
+          }
+        }
+      },
+      "insert": {
+        "check": {
+          "organization": {
+            "org_members": {
+              "_and": [
+                { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                { "role": { "_eq": "owner" } }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,645 @@
+[
+  {
+    "table": {
+      "name": "organizations",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "name", "usage_quota", "current_usage", "active_running_count", "created_at", "updated_at"],
+          "filter": {}
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "organization_join_requests",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "org_id", "user_id", "status", "requested_at", "reviewed_by", "reviewed_at"],
+          "filter": {
+            "_or": [
+              {
+                "user_id": {
+                  "_eq": "X-Hasura-User-Id"
+                }
+              },
+              {
+                "organization": {
+                  "org_members": {
+                    "_and": [
+                      { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                      { "role": { "_eq": "owner" } }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "insert_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "check": {
+            "_and": [
+              { "user_id": { "_eq": "X-Hasura-User-Id" } },
+              { "status": { "_eq": "pending" } }
+            ]
+          },
+          "columns": ["org_id", "user_id", "status"]
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "org_members",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "org_id", "user_id", "role", "created_at"],
+          "filter": {
+            "organization": {
+              "org_members": {
+                "user_id": {
+                  "_eq": "X-Hasura-User-Id"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "insert_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "check": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_eq": "owner" } }
+                ]
+              }
+            }
+          },
+          "columns": ["org_id", "user_id", "role"]
+        }
+      }
+    ],
+    "update_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_eq": "owner" } }
+                ]
+              }
+            }
+          },
+          "check": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_eq": "owner" } }
+                ]
+              }
+            }
+          },
+          "columns": ["role"]
+        }
+      }
+    ],
+    "delete_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_eq": "owner" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "users",
+      "schema": "auth"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "email", "display_name", "avatar_url", "created_at"],
+          "filter": {
+            "org_members": {
+              "organization": {
+                "org_members": {
+                  "user_id": {
+                    "_eq": "X-Hasura-User-Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "workflows",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "org_id", "created_by", "name", "description", "created_at", "updated_at"],
+          "filter": {
+            "organization": {
+              "org_members": {
+                "user_id": {
+                  "_eq": "X-Hasura-User-Id"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "insert_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "check": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          },
+          "columns": ["org_id", "created_by", "name", "description"]
+        }
+      }
+    ],
+    "update_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          },
+          "columns": ["name", "description", "updated_at"]
+        }
+      }
+    ],
+    "delete_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "organization": {
+              "org_members": {
+                "_and": [
+                  { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                  { "role": { "_in": ["owner", "editor"] } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "workflow_steps",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "workflow_id", "position", "step_type", "config", "true_next_step_id", "false_next_step_id", "created_at", "updated_at"],
+          "filter": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "user_id": {
+                    "_eq": "X-Hasura-User-Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "insert_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "check": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "step_type": {
+                      "_nin": ["db_write", "notify"]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "columns": ["workflow_id", "position", "step_type", "config", "true_next_step_id", "false_next_step_id"]
+        }
+      }
+    ],
+    "update_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "step_type": {
+                      "_nin": ["db_write", "notify"]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "check": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "step_type": {
+                      "_nin": ["db_write", "notify"]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "columns": ["position", "step_type", "config", "true_next_step_id", "false_next_step_id", "updated_at"]
+        }
+      }
+    ],
+    "delete_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "_and": [
+                    { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                    { "role": { "_in": ["owner", "editor"] } }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "workflow_triggers",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "workflow_id", "trigger_type", "config", "created_at", "updated_at"],
+          "filter": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "user_id": {
+                    "_eq": "X-Hasura-User-Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "insert_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "check": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "trigger_type": {
+                      "_eq": "manual"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "columns": ["workflow_id", "trigger_type", "config", "webhook_secret"]
+        }
+      }
+    ],
+    "update_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "trigger_type": {
+                      "_eq": "manual"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "check": {
+            "_or": [
+              {
+                "workflow": {
+                  "organization": {
+                    "org_members": {
+                      "_and": [
+                        { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                        { "role": { "_eq": "owner" } }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "_and": [
+                  {
+                    "workflow": {
+                      "organization": {
+                        "org_members": {
+                          "_and": [
+                            { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                            { "role": { "_eq": "editor" } }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "trigger_type": {
+                      "_eq": "manual"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "columns": ["trigger_type", "config", "webhook_secret", "updated_at"]
+        }
+      }
+    ],
+    "delete_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "filter": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "_and": [
+                    { "user_id": { "_eq": "X-Hasura-User-Id" } },
+                    { "role": { "_in": ["owner", "editor"] } }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "workflow_runs",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "workflow_id", "trigger_type", "status", "current_step_id", "paused_at_step_id", "snapshot_config", "error_message", "started_at", "completed_at"],
+          "filter": {
+            "workflow": {
+              "organization": {
+                "org_members": {
+                  "user_id": {
+                    "_eq": "X-Hasura-User-Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "table": {
+      "name": "step_runs",
+      "schema": "public"
+    },
+    "select_permissions": [
+      {
+        "role": "user",
+        "permission": {
+          "columns": ["id", "workflow_run_id", "step_id", "status", "input", "output", "error_message", "attempt_count", "approved_by", "approved_at", "started_at", "completed_at"],
+          "filter": {
+            "workflow_run": {
+              "workflow": {
+                "organization": {
+                  "org_members": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

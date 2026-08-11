@@ -1,0 +1,338 @@
+{
+  "actions": [
+    {
+      "name": "triggerWorkflowRun",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/trigger-workflow-run",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "workflow_id",
+            "type": "uuid!"
+          }
+        ],
+        "output_type": "TriggerWorkflowRunOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "approveStep",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/approve-step",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "step_run_id",
+            "type": "uuid!"
+          }
+        ],
+        "output_type": "ApproveStepOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "triggerWebhookRun",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/trigger-webhook-run",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "webhook_secret",
+            "type": "String!"
+          },
+          {
+            "name": "payload",
+            "type": "jsonb"
+          }
+        ],
+        "output_type": "TriggerWebhookRunOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "addOrgMemberByEmail",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/add-org-member-by-email",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "org_id",
+            "type": "uuid!"
+          },
+          {
+            "name": "email",
+            "type": "String!"
+          },
+          {
+            "name": "role",
+            "type": "String!"
+          }
+        ],
+        "output_type": "AddOrgMemberByEmailOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "createOrganization",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/create-organization",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "name",
+            "type": "String!"
+          }
+        ],
+        "output_type": "CreateOrganizationOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "reviewJoinRequest",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/review-join-request",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "request_id",
+            "type": "uuid!"
+          },
+          {
+            "name": "action",
+            "type": "String!"
+          }
+        ],
+        "output_type": "ReviewJoinRequestOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "updateMemberRole",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/update-member-role",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "member_id",
+            "type": "uuid!"
+          },
+          {
+            "name": "role",
+            "type": "String!"
+          }
+        ],
+        "output_type": "UpdateMemberRoleOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "removeOrgMember",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/remove-org-member",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "member_id",
+            "type": "uuid!"
+          }
+        ],
+        "output_type": "RemoveOrgMemberOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "name": "createWebhookTrigger",
+      "definition": {
+        "kind": "synchronous",
+        "handler": "https://grumpy-chipmunk-58.loca.lt/actions/create-webhook-trigger",
+        "forward_client_headers": true,
+        "headers": [
+          {
+            "name": "bypass-tunnel-reminder",
+            "value": "true"
+          }
+        ],
+        "arguments": [
+          {
+            "name": "workflow_id",
+            "type": "uuid!"
+          }
+        ],
+        "output_type": "CreateWebhookTriggerOutput"
+      },
+      "permissions": [
+        {
+          "role": "user"
+        }
+      ]
+    }
+  ],
+  "custom_types": {
+    "objects": [
+      {
+        "name": "CreateWebhookTriggerOutput",
+        "fields": [
+          { "name": "id", "type": "uuid!" },
+          { "name": "workflow_id", "type": "uuid!" },
+          { "name": "webhook_url", "type": "String!" },
+          { "name": "webhook_secret", "type": "String!" },
+          { "name": "message", "type": "String!" }
+        ]
+      },
+      {
+        "name": "TriggerWorkflowRunOutput",
+        "fields": [
+          { "name": "id", "type": "uuid!" },
+          { "name": "workflow_id", "type": "uuid!" },
+          { "name": "status", "type": "String!" }
+        ]
+      },
+      {
+        "name": "ApproveStepOutput",
+        "fields": [
+          { "name": "workflow_run_id", "type": "uuid!" },
+          { "name": "status", "type": "String!" },
+          { "name": "approved_by", "type": "uuid!" }
+        ]
+      },
+      {
+        "name": "TriggerWebhookRunOutput",
+        "fields": [
+          { "name": "id", "type": "uuid!" },
+          { "name": "workflow_id", "type": "uuid!" },
+          { "name": "status", "type": "String!" },
+          { "name": "trigger_type", "type": "String!" }
+        ]
+      },
+      {
+        "name": "AddOrgMemberByEmailOutput",
+        "fields": [
+          { "name": "success", "type": "Boolean!" },
+          { "name": "message", "type": "String!" },
+          { "name": "member_id", "type": "uuid" }
+        ]
+      },
+      {
+        "name": "CreateOrganizationOutput",
+        "fields": [
+          { "name": "id", "type": "uuid!" },
+          { "name": "name", "type": "String!" },
+          { "name": "role", "type": "String!" }
+        ]
+      },
+      {
+        "name": "ReviewJoinRequestOutput",
+        "fields": [
+          { "name": "success", "type": "Boolean!" },
+          { "name": "message", "type": "String!" },
+          { "name": "status", "type": "String!" }
+        ]
+      },
+      {
+        "name": "UpdateMemberRoleOutput",
+        "fields": [
+          { "name": "success", "type": "Boolean!" },
+          { "name": "message", "type": "String!" },
+          { "name": "member_id", "type": "uuid!" },
+          { "name": "role", "type": "String!" }
+        ]
+      },
+      {
+        "name": "RemoveOrgMemberOutput",
+        "fields": [
+          { "name": "success", "type": "Boolean!" },
+          { "name": "message", "type": "String!" },
+          { "name": "member_id", "type": "uuid!" }
+        ]
+      }
+    ]
+  }
+}
